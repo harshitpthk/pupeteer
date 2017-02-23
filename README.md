@@ -11,3 +11,6 @@ get(String path) // An example zookeeper path is  /a/b/c/d
 ```
 
 One useful method to parse a Json file to JsonObject is also provided.
+```
+getConfiguration(String filePath)
+```
