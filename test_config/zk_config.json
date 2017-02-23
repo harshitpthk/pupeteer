@@ -1,0 +1,6 @@
+{
+  "zk_connection_string":"localhost:2181",
+  "zk_connection_timeout":10000,
+  "zk_retry_policy_max_timeout":10000,
+  "zk_retry_policy_time_interval":1000
+}
