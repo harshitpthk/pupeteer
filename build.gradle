@@ -43,6 +43,7 @@ repositories {
 
 def libName = 'puppeteer'
 
+afterReleaseBuild.dependsOn { allprojects.uploadArchives }
 
 shadowJar {
     baseName = libName
@@ -51,6 +52,34 @@ shadowJar {
         attributes 'Implementation-Title': 'puppeteer',
                 'Implementation-Version': '1.0'
 
+    }
+}
+
+task copyToLib(type: Copy) {
+    into "build/libs"
+    from configurations.compile
+}
+
+task archive(type: Tar, dependsOn: 'shadowJar') {
+    extension = 'tar.gz'
+    archiveName = project.name + '.' + extension
+    compression = Compression.GZIP
+    destinationDir = file('build/dist')
+    into("puppeteer/lib") {
+        from configurations.runtime
+        from("build/libs")
+        from ("conf")
+        from ("src/main/resources")
+    }
+}
+
+build.dependsOn(copyToLib)
+
+uploadArchives {
+    repositories {
+        flatDir {
+            dirs 'repos'
+        }
     }
 }
 
