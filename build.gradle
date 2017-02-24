@@ -36,10 +36,9 @@ def libName = 'puppeteer'
 
 jar {
     baseName = libName
-    classifier = 'fat'
     manifest {
         attributes 'Implementation-Title': 'puppeteer',
-                'Implementation-Version': '1.0'
+                'Implementation-Version': '1.1.0'
 
     }
 }
