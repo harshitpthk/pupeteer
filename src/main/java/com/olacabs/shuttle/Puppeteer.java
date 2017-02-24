@@ -1,3 +1,5 @@
+package com.olacabs.shuttle;
+
 import com.google.gson.JsonObject;
 
 /**

@@ -1,3 +1,5 @@
+package com.olacabs.shuttle;
+
 /**
  * Puppeteer Exception wrapper
  * Created by harshit.pathak on 23/02/17.
