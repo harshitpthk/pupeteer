@@ -17,7 +17,6 @@ apply plugin: 'maven'
 apply plugin: 'java'
 apply plugin: 'jacoco'
 
-apply plugin: 'pmd'
 
 allprojects {
     configurations.all {
@@ -26,13 +25,7 @@ allprojects {
         }
     }
 }
-pmd {
-    toolVersion = '4.3'
-}
 
-pmdMain {
-    ruleSets = [ "basic", "braces" ]
-}
 
 jacocoTestReport {
     reports {
