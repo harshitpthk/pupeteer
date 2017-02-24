@@ -3,6 +3,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * A Default Puppeteer Implementation Which is used by default if no external watcher is provided
  * Created by harshit.pathak on 24/02/17.
  */
 public class DefaultPupeteerWatcher implements PuppeteerWatcher{
