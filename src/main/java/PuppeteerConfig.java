@@ -42,7 +42,7 @@ class PuppeteerConfig {
     }
 
     /*
-    Method strictly traverses a tree. Throws @link{ PuppeteerException.InvalidPathException} exception in any other case
+    Method strictly traverses a tree. If Json Array is found treats the node as leaf.
      */
     static void traverseConfigTree(JsonObject configTemplate, String root, ConfigTraversalListener listener) throws Exception {
 
@@ -59,7 +59,7 @@ class PuppeteerConfig {
                 }
                 else{
                     String leafPath = String.format("%s/%s",root,keyValue.getKey());
-                    throw new PuppeteerException.InvalidPathException(String.format("Invalid Json Object on path %s",leafPath));
+                    listener.leafCallback(leafPath);
                 }
             }
         }
