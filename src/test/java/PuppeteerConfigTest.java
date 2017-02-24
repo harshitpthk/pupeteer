@@ -13,7 +13,7 @@ import java.io.FileNotFoundException;
  */
 
 public class PuppeteerConfigTest {
-    TestingServer zkServer;
+    private TestingServer zkServer;
     private JsonObject configTemplate;
     private JsonObject invalidConfigTemplate;
 
@@ -50,23 +50,33 @@ public class PuppeteerConfigTest {
     @Test
     public void testConfigTraversal() throws Exception {
         PuppeteerConfig.traverseConfigTree(configTemplate, "", new PuppeteerConfig.ConfigTraversalListener() {
-          @Override
-          public void leafCallback(String leafPath) {
+            @Override
+            public void leafCallback(String leafPath) {
               Assert.assertNotNull(leafPath);
               System.out.println(leafPath);
-          }
+            }
+
+            @Override
+            public void internalTreeNodeCallback(String nodePath) {
+                System.out.println(nodePath);
+            }
         });
     }
 
     @Test
     public void testInvalidConfigTraversal() throws Exception {
         try {
-          PuppeteerConfig.traverseConfigTree(invalidConfigTemplate, "", new PuppeteerConfig.ConfigTraversalListener() {
-            @Override
-            public void leafCallback(String leafPath) {
-              System.out.println(leafPath);
-              }
-          });
+            PuppeteerConfig.traverseConfigTree(invalidConfigTemplate, "", new PuppeteerConfig.ConfigTraversalListener() {
+                @Override
+                public void leafCallback(String leafPath) {
+                  System.out.println(leafPath);
+                }
+
+                @Override
+                public void internalTreeNodeCallback(String nodePath) {
+                    System.out.println(nodePath);
+                }
+            });
         }
         catch (PuppeteerException.InvalidPathException e){
           Assert.assertNotNull(e);

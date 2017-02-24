@@ -74,6 +74,11 @@ public class PuppeteerImpl implements Puppeteer {
                     LOGGER.info(String.format("Config value for key %s is %s", leafPath, zkValue));
                 }
             }
+
+            @Override
+            public void internalTreeNodeCallback(String nodePath) {
+
+            }
         });
 
         if(emptyConfigValues.size()>0){

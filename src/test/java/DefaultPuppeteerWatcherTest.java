@@ -1,4 +1,7 @@
 import com.google.gson.JsonObject;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.retry.RetryUntilElapsed;
 import org.apache.curator.test.TestingServer;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
@@ -12,7 +15,7 @@ import org.junit.Test;
  * Created by harshit.pathak on 24/02/17.
  */
 public class DefaultPuppeteerWatcherTest {
-    TestingServer zkServer;
+    private TestingServer zkServer;
     private Puppeteer puppeteer;
 
     @Before
@@ -21,7 +24,32 @@ public class DefaultPuppeteerWatcherTest {
         JsonObject configTemplate = PuppeteerConfig.getConfiguration("test_config/config_template.json");
         JsonObject zkConfig = PuppeteerConfig.getConfiguration("test_config/zk_config.json");
         String connectionString = zkConfig.get("zk_connection_string").getAsString();
+        int retryPolicyTimeout = zkConfig.get("zk_retry_policy_max_timeout").getAsInt();
+        int retryPolicyTimeInterval = zkConfig.get("zk_retry_policy_time_interval").getAsInt();
         puppeteer = new PuppeteerImpl();
+        final CuratorFramework client = CuratorFrameworkFactory.newClient(connectionString, new RetryUntilElapsed(retryPolicyTimeout, retryPolicyTimeInterval));
+        client.start();
+
+        PuppeteerConfig.traverseConfigTree(configTemplate, "", new PuppeteerConfig.ConfigTraversalListener() {
+
+            @Override
+            public void leafCallback(String leafPath) {
+                try {
+                    client.create().forPath(leafPath, "bar".getBytes() );
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void internalTreeNodeCallback(String nodePath) {
+                try {
+                    client.create().forPath(nodePath);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         puppeteer.initialize(connectionString,configTemplate);
     }
 

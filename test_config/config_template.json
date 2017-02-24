@@ -1,12 +1,12 @@
 {
   "ola":{
     "shuttle":{
-      "foo":null,
+      "foo":"bar",
       "oms":{
         "foo":"bar"
       },
       "ims":{
-        "foo":null
+        "foo":"bar"
       }
     }
   }

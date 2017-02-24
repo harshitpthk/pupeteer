@@ -53,7 +53,9 @@ class PuppeteerConfig {
             }
             else{
                 if(keyValue.getValue().isJsonObject()) {
-                    traverseConfigTree(keyValue.getValue().getAsJsonObject(), String.format("%s/%s",root,keyValue.getKey()), listener);
+                    String nodePath = String.format("%s/%s",root,keyValue.getKey());
+                    listener.internalTreeNodeCallback(nodePath);
+                    traverseConfigTree(keyValue.getValue().getAsJsonObject(), nodePath , listener);
                 }
                 else{
                     String leafPath = String.format("%s/%s",root,keyValue.getKey());
@@ -65,5 +67,6 @@ class PuppeteerConfig {
 
     public interface ConfigTraversalListener{
         void leafCallback(String leafPath);
+        void internalTreeNodeCallback(String nodePath);
     }
 }

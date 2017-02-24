@@ -1,4 +1,7 @@
 import com.google.gson.JsonObject;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.retry.RetryUntilElapsed;
 import org.apache.curator.test.TestingServer;
 import org.junit.After;
 import org.junit.Assert;
@@ -10,7 +13,7 @@ import org.junit.Test;
  * Created by harshit.pathak on 23/02/17.
  */
 public class PuppeteerTest {
-    TestingServer zkServer;
+    private TestingServer zkServer;
     private JsonObject configTemplate;
     private JsonObject invalidConfigTemplate;
     private String connectionString;
@@ -30,6 +33,29 @@ public class PuppeteerTest {
         retryPolicyTimeout = zkConfig.get("zk_retry_policy_max_timeout").getAsInt();
         retryPolicyTimeInterval = zkConfig.get("zk_retry_policy_time_interval").getAsInt();
         puppeteer = new PuppeteerImpl();
+        final CuratorFramework client = CuratorFrameworkFactory.newClient(connectionString, new RetryUntilElapsed(retryPolicyTimeout, retryPolicyTimeInterval));
+        client.start();
+
+        PuppeteerConfig.traverseConfigTree(configTemplate, "", new PuppeteerConfig.ConfigTraversalListener() {
+
+            @Override
+            public void leafCallback(String leafPath) {
+                try {
+                    client.create().forPath(leafPath, "bar".getBytes() );
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void internalTreeNodeCallback(String nodePath) {
+                try {
+                    client.create().forPath(nodePath);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @After
