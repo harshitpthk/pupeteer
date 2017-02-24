@@ -51,6 +51,7 @@ public class PuppeteerImpl implements Puppeteer {
         // The only required arguments are the connection string and the retry policy
         client = CuratorFrameworkFactory.newClient(connectionString, retryPolicy);
         client.start();
+        client.blockUntilConnected(this.maxConnectionTimeout, TimeUnit.MILLISECONDS);
         final List<String> emptyConfigValues = new ArrayList<>();
 
         LOGGER.info(String.format("Verifying keys present in Zookeeper against the template %s", this.configTemplate.toString()));

@@ -6,9 +6,9 @@ import com.google.gson.JsonObject;
  */
 
 public interface Puppeteer {
-    int DEFAULT_RETRY_POLICY_MAX_TIMEOUT     =   10000;
-    int DEFAULT_RETRY_POLICY_TIME_INTERVAL   =   1000;
-    int DEFAULT_CONNECTION_MAX_TIMEOUT       =   10000;
+    int DEFAULT_RETRY_POLICY_MAX_TIMEOUT     =   4000;
+    int DEFAULT_RETRY_POLICY_TIME_INTERVAL   =   500;
+    int DEFAULT_CONNECTION_MAX_TIMEOUT       =   4000;
 
     void initialize(String connectionString, JsonObject configTemplate) throws Exception;
     void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout) throws Exception;
