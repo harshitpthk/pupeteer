@@ -1,4 +1,5 @@
 import com.google.gson.JsonObject;
+import com.olacabs.shuttle.PuppeteerConfig;
 import org.apache.curator.test.TestingServer;
 import org.junit.After;
 import org.junit.Assert;
@@ -15,13 +16,13 @@ import java.io.FileNotFoundException;
 public class PuppeteerConfigTest {
     private TestingServer zkServer;
     private JsonObject configTemplate;
-    private JsonObject invalidConfigTemplate;
+    private JsonObject configTemplateWithArray;
 
     @Before
     public void setUp() throws Exception {
         zkServer = new TestingServer(2181, true);
         configTemplate = PuppeteerConfig.getConfiguration("test_config/config_template.json");
-        invalidConfigTemplate = PuppeteerConfig.getConfiguration("test_config/invalid_config_template.json");
+        configTemplateWithArray = PuppeteerConfig.getConfiguration("test_config/config_template_with_array.json");
     }
 
     @After
@@ -64,23 +65,19 @@ public class PuppeteerConfigTest {
     }
 
     @Test
-    public void testInvalidConfigTraversal() throws Exception {
-        try {
-            PuppeteerConfig.traverseConfigTree(invalidConfigTemplate, "", new PuppeteerConfig.ConfigTraversalListener() {
-                @Override
-                public void leafCallback(String leafPath) {
-                  System.out.println(leafPath);
-                }
+    public void testConfigWithArrayTraversal() throws Exception {
+        PuppeteerConfig.traverseConfigTree(configTemplateWithArray, "", new PuppeteerConfig.ConfigTraversalListener() {
+            @Override
+            public void leafCallback(String leafPath) {
+              System.out.println(leafPath);
+            }
 
-                @Override
-                public void internalTreeNodeCallback(String nodePath) {
-                    System.out.println(nodePath);
-                }
-            });
-        }
-        catch (PuppeteerException.InvalidPathException e){
-          Assert.assertNotNull(e);
-        }
+            @Override
+            public void internalTreeNodeCallback(String nodePath) {
+                System.out.println(nodePath);
+            }
+        });
+
     }
 
 

@@ -16,7 +16,7 @@ import java.util.Scanner;
  * Created by harshit.pathak on 14/12/16.
  */
 
-class PuppeteerConfig {
+public class PuppeteerConfig {
     private static Logger LOG = LoggerFactory.getLogger(PuppeteerConfig.class);
 
     /*
@@ -46,7 +46,7 @@ class PuppeteerConfig {
     /*
     Method strictly traverses a tree. If Json Array is found treats the node as leaf.
      */
-    static void traverseConfigTree(JsonObject configTemplate, String root, ConfigTraversalListener listener) throws Exception {
+    public static void traverseConfigTree(JsonObject configTemplate, String root, ConfigTraversalListener listener) throws Exception {
 
         for(Map.Entry<String,JsonElement> keyValue : configTemplate.entrySet() ){
             if(keyValue.getValue().isJsonNull() || keyValue.getValue().isJsonPrimitive()){

@@ -12,7 +12,7 @@ public class DefaultPuppeteerWatcher implements PuppeteerWatcher{
     private Logger LOGGER = LoggerFactory.getLogger(DefaultPuppeteerWatcher.class);
     private Puppeteer puppeteer;
 
-    DefaultPuppeteerWatcher(Puppeteer puppeteer) {
+    public DefaultPuppeteerWatcher(Puppeteer puppeteer) {
         this.puppeteer = puppeteer;
     }
 
@@ -21,7 +21,7 @@ public class DefaultPuppeteerWatcher implements PuppeteerWatcher{
         handleEvent(event);
     }
 
-    String handleEvent(WatchedEvent event) throws Exception {
+    public String handleEvent(WatchedEvent event) throws Exception {
         LOGGER.info(event.getType().name());
         switch (event.getType()){
             case NodeDataChanged: {
