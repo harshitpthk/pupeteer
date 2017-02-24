@@ -3,7 +3,7 @@
     "shuttle":{
       "foo":null,
       "oms":{
-        "foo":null
+        "foo":"bar"
       },
       "ims":{
         "foo":null

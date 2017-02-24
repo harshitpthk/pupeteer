@@ -15,4 +15,9 @@ class PuppeteerException {
             super(message);
         }
     }
+    static class UninitializedException extends Exception {
+        UninitializedException(String message) {
+            super(message);
+        }
+    }
 }

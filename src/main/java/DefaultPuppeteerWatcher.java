@@ -16,19 +16,23 @@ public class DefaultPuppeteerWatcher implements PuppeteerWatcher{
 
     @Override
     public void process(WatchedEvent event) throws Exception {
+        handleEvent(event);
+    }
+
+    String handleEvent(WatchedEvent event) throws Exception {
         LOGGER.info(event.getType().name());
         switch (event.getType()){
             case NodeDataChanged: {
                 String newValue = puppeteer.get(event.getPath(),this);
                 LOGGER.info(String.format(" %s node data changed to %s", event.getPath(), newValue));
-                break;
+                return newValue;
             }
             case NodeDeleted:{
-                LOGGER.info("node deleted "+event.getPath());
-                break;
+                LOGGER.info("node deleted " + event.getPath());
+                return event.getPath();
             }
             default: {
-                break;
+                return null;
             }
         }
     }

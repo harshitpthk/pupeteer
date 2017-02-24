@@ -95,16 +95,23 @@ public class PuppeteerImpl implements Puppeteer {
     @Override
     public String get(String key, PuppeteerWatcher watcher) throws Exception {
         if(client == null){
-            client = CuratorFrameworkFactory.newClient(connectionString, retryPolicy);
-            client.start();
+            throw new PuppeteerException.UninitializedException(String.format("Zookeeper hasn't been initialized, failed to fetch value for key %s", key));
         }
         client.blockUntilConnected(this.maxConnectionTimeout, TimeUnit.MILLISECONDS);
         try {
             return new String(client.getData().usingWatcher(watcher).forPath(key));
         }
         catch (Exception e){
-            throw new PuppeteerException.NoValueForKeyException(String.format("no value present in zookeeper for the key %s", key));
+            throw new PuppeteerException.NoValueForKeyException(String.format("No value present in zookeeper for the key %s", key));
         }
+    }
+
+    @Override
+    public void close() throws Exception {
+        if(client == null){
+            return;
+        }
+        client.close();
     }
 
 

@@ -19,4 +19,5 @@ public interface Puppeteer {
     String get(String key) throws Exception;
     String get(String key, PuppeteerWatcher watcher) throws Exception;
 
+    void close() throws Exception;
 }

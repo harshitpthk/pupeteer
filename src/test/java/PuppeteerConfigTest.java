@@ -29,6 +29,7 @@ public class PuppeteerConfigTest {
 
   @Test
   public void testGetConfiguration() throws Exception {
+    PuppeteerConfig unusedPuppeteerConfigObject = new PuppeteerConfig();
     JsonObject emptyConfig = PuppeteerConfig.getConfiguration("test_config/zk_invalid_config.json");
     Assert.assertTrue(emptyConfig.entrySet().isEmpty());
     JsonObject testConfig = PuppeteerConfig.getConfiguration("test_config/zk_config.json");

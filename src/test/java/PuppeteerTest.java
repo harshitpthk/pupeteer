@@ -89,6 +89,15 @@ public class PuppeteerTest {
     }
 
     @Test
+    public void testGetKeyWithNullClient() {
+        try {
+            String bar = puppeteer.get("/ola/shuttle/foo");
+        } catch (Exception e) {
+            Assert.assertTrue( e instanceof PuppeteerException.UninitializedException);
+        }
+    }
+
+    @Test
     public void testGetInvalidKey()  {
         try {
             puppeteer.initialize(connectionString, configTemplate, connectionTimeout, retryPolicyTimeout, retryPolicyTimeInterval);
