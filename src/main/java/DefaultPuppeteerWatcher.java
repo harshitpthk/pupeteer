@@ -6,11 +6,11 @@ import org.slf4j.LoggerFactory;
  * A Default Puppeteer Implementation Which is used by default if no external watcher is provided
  * Created by harshit.pathak on 24/02/17.
  */
-public class DefaultPupeteerWatcher implements PuppeteerWatcher{
-    private Logger LOGGER = LoggerFactory.getLogger(DefaultPupeteerWatcher.class);
+public class DefaultPuppeteerWatcher implements PuppeteerWatcher{
+    private Logger LOGGER = LoggerFactory.getLogger(DefaultPuppeteerWatcher.class);
     private Puppeteer puppeteer;
 
-    public DefaultPupeteerWatcher(Puppeteer puppeteer) {
+    DefaultPuppeteerWatcher(Puppeteer puppeteer) {
         this.puppeteer = puppeteer;
     }
 

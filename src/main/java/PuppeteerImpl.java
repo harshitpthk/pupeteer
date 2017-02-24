@@ -34,7 +34,7 @@ public class PuppeteerImpl implements Puppeteer {
     }
     @Override
     public void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout, int retryPolicyMaxTimeout, int retryPolicyTimeInterval) throws Exception {
-        initialize(connectionString,configTemplate,maxConnectionTimeout,retryPolicyMaxTimeout,retryPolicyTimeInterval, new DefaultPupeteerWatcher(this));
+        initialize(connectionString,configTemplate,maxConnectionTimeout,retryPolicyMaxTimeout,retryPolicyTimeInterval, new DefaultPuppeteerWatcher(this));
     }
 
     @Override
