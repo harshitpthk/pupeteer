@@ -43,8 +43,6 @@ repositories {
 
 def libName = 'puppeteer'
 
-afterReleaseBuild.dependsOn { allprojects.uploadArchives }
-
 shadowJar {
     baseName = libName
     classifier = 'fat'
@@ -73,8 +71,6 @@ task archive(type: Tar, dependsOn: 'shadowJar') {
     }
 }
 
-build.dependsOn(copyToLib)
-
 uploadArchives {
     repositories {
         flatDir {
@@ -82,6 +78,8 @@ uploadArchives {
         }
     }
 }
+
+afterReleaseBuild.dependsOn { uploadArchives }
 
 dependencies {
     compile "org.slf4j:slf4j-api:1.7.10", 'log4j:log4j:1.2.17'
