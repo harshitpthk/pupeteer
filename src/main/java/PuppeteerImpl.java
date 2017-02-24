@@ -28,10 +28,12 @@ public class PuppeteerImpl implements Puppeteer {
     public void initialize(String connectionString, JsonObject configTemplate) throws Exception {
         initialize(connectionString, configTemplate,DEFAULT_CONNECTION_MAX_TIMEOUT);
     }
+
     @Override
     public void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout) throws Exception {
         initialize(connectionString, configTemplate, maxConnectionTimeout, DEFAULT_RETRY_POLICY_MAX_TIMEOUT, DEFAULT_RETRY_POLICY_TIME_INTERVAL);
     }
+
     @Override
     public void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout, int retryPolicyMaxTimeout, int retryPolicyTimeInterval) throws Exception {
         initialize(connectionString,configTemplate,maxConnectionTimeout,retryPolicyMaxTimeout,retryPolicyTimeInterval, new DefaultPuppeteerWatcher(this));
