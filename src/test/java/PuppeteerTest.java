@@ -1,4 +1,5 @@
 import com.google.gson.JsonObject;
+import org.apache.curator.test.TestingServer;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,6 +10,7 @@ import org.junit.Test;
  * Created by harshit.pathak on 23/02/17.
  */
 public class PuppeteerTest {
+    TestingServer zkServer;
     private JsonObject configTemplate;
     private JsonObject invalidConfigTemplate;
     private String connectionString;
@@ -19,6 +21,7 @@ public class PuppeteerTest {
 
     @Before
     public void setUp() throws Exception {
+        zkServer = new TestingServer(2181, true);
         configTemplate = PuppeteerConfig.getConfiguration("test_config/config_template.json");
         invalidConfigTemplate = PuppeteerConfig.getConfiguration("test_config/invalid_config_template_unknown_keys.json");
         JsonObject zkConfig = PuppeteerConfig.getConfiguration("test_config/zk_config.json");
@@ -31,7 +34,7 @@ public class PuppeteerTest {
 
     @After
     public void tearDown() throws Exception {
-
+        zkServer.stop();
     }
 
     @Test

@@ -1,4 +1,5 @@
 import com.google.gson.JsonObject;
+import org.apache.curator.test.TestingServer;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.junit.After;
@@ -11,10 +12,12 @@ import org.junit.Test;
  * Created by harshit.pathak on 24/02/17.
  */
 public class DefaultPuppeteerWatcherTest {
+    TestingServer zkServer;
     private Puppeteer puppeteer;
 
     @Before
     public void setUp() throws Exception {
+        zkServer = new TestingServer(2181, true);
         JsonObject configTemplate = PuppeteerConfig.getConfiguration("test_config/config_template.json");
         JsonObject zkConfig = PuppeteerConfig.getConfiguration("test_config/zk_config.json");
         String connectionString = zkConfig.get("zk_connection_string").getAsString();
@@ -25,6 +28,7 @@ public class DefaultPuppeteerWatcherTest {
     @After
     public void tearDown() throws Exception {
         puppeteer.close();
+        zkServer.stop();
     }
 
     @Test
