@@ -12,12 +12,12 @@ public class PuppeteerException {
         }
     }
 
-    static class NoValueForKeyException extends Exception {
+    public static class NoValueForKeyException extends Exception {
         NoValueForKeyException(String message) {
             super(message);
         }
     }
-    static class UninitializedException extends Exception {
+    public static class UninitializedException extends Exception {
         UninitializedException(String message) {
             super(message);
         }
