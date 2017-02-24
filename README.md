@@ -14,3 +14,7 @@ One useful method to parse a Json file to JsonObject is also provided.
 ```
 getConfiguration(String filePath)
 ```
+
+TODOs
+* Add watchers to znodes.
+* Support ACLs.

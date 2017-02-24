@@ -17,25 +17,32 @@ import java.util.concurrent.TimeUnit;
 
 public class PuppeteerImpl implements Puppeteer {
     private static Logger LOGGER = LoggerFactory.getLogger(PuppeteerImpl.class);
+    private int maxConnectionTimeout = DEFAULT_CONNECTION_MAX_TIMEOUT;
     private CuratorFramework client;
     private String connectionString;
     private JsonObject configTemplate;
     private RetryUntilElapsed retryPolicy;
-    private int maxConnectionTimeout = DEFAULT_CONNECTION_MAX_TIMEOUT;
+    private PuppeteerWatcher puppeteerWatcher;
 
+    @Override
     public void initialize(String connectionString, JsonObject configTemplate) throws Exception {
         initialize(connectionString, configTemplate,DEFAULT_CONNECTION_MAX_TIMEOUT);
     }
-
+    @Override
     public void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout) throws Exception {
         initialize(connectionString, configTemplate, maxConnectionTimeout, DEFAULT_RETRY_POLICY_MAX_TIMEOUT, DEFAULT_RETRY_POLICY_TIME_INTERVAL);
     }
-
+    @Override
     public void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout, int retryPolicyMaxTimeout, int retryPolicyTimeInterval) throws Exception {
+        initialize(connectionString,configTemplate,maxConnectionTimeout,retryPolicyMaxTimeout,retryPolicyTimeInterval, new DefaultPupeteerWatcher(this));
+    }
+
+    @Override
+    public void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout, int retryPolicyMaxTimeout, int retryPolicyTimeInterval, PuppeteerWatcher watcher) throws Exception {
         this.connectionString = connectionString;
         this.configTemplate = configTemplate;
         this.maxConnectionTimeout = maxConnectionTimeout;
-
+        this.puppeteerWatcher = watcher;
         // Since the application start up will depend on the config template being getting verified we are
         // keeping a retry max elapsed policy for initializing the zookeeper connection.
         retryPolicy = new RetryUntilElapsed(retryPolicyMaxTimeout, retryPolicyTimeInterval);
@@ -77,14 +84,20 @@ public class PuppeteerImpl implements Puppeteer {
         return client != null && client.getZookeeperClient().isConnected();
     }
 
+    @Override
     public String get(String key) throws Exception {
+        return get(key, puppeteerWatcher);
+    }
+
+    @Override
+    public String get(String key, PuppeteerWatcher watcher) throws Exception {
         if(client == null){
             client = CuratorFrameworkFactory.newClient(connectionString, retryPolicy);
             client.start();
         }
         client.blockUntilConnected(this.maxConnectionTimeout, TimeUnit.MILLISECONDS);
         try {
-            return new String(client.getData().forPath(key));
+            return new String(client.getData().usingWatcher(watcher).forPath(key));
         }
         catch (Exception e){
             throw new PuppeteerException.NoValueForKeyException(String.format("no value present in zookeeper for the key %s", key));
