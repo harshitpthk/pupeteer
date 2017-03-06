@@ -25,6 +25,8 @@ public class PuppeteerTest {
     private int retryPolicyTimeout;
     private int retryPolicyTimeInterval;
     private Puppeteer puppeteer;
+    private String userName;
+    private String password;
 
     @Before
     public void setUp() throws Exception {
@@ -36,6 +38,8 @@ public class PuppeteerTest {
         connectionTimeout = zkConfig.get("zk_connection_timeout").getAsInt();
         retryPolicyTimeout = zkConfig.get("zk_retry_policy_max_timeout").getAsInt();
         retryPolicyTimeInterval = zkConfig.get("zk_retry_policy_time_interval").getAsInt();
+        userName = zkConfig.get("zk_username").getAsString();
+        password = zkConfig.get("zk_password").getAsString();
         puppeteer = new PuppeteerImpl();
         final CuratorFramework client = CuratorFrameworkFactory.newClient(connectionString, new RetryUntilElapsed(retryPolicyTimeout, retryPolicyTimeInterval));
         client.start();
@@ -69,13 +73,13 @@ public class PuppeteerTest {
 
     @Test
     public void testPuppeteerDefaultInitialization() throws Exception {
-        puppeteer.initialize(connectionString, configTemplate);
+        puppeteer.initialize(connectionString, configTemplate, userName, password);
         Assert.assertTrue(puppeteer.isConnected());
     }
     @Test
     public void testPuppeteerDefaultInitializationWithInvalidKeys() {
         try {
-            puppeteer.initialize(connectionString, invalidConfigTemplate);
+            puppeteer.initialize(connectionString, invalidConfigTemplate, userName, password);
         } catch (Exception e) {
             Assert.assertTrue(e instanceof PuppeteerException.NoValueForKeyException);
         }
@@ -84,14 +88,14 @@ public class PuppeteerTest {
 
     @Test
     public void testPuppeteerConnectionTimeoutInitialization() throws Exception {
-        puppeteer.initialize(connectionString, configTemplate, connectionTimeout);
+        puppeteer.initialize(connectionString, configTemplate, connectionTimeout, userName, password);
         Assert.assertTrue(puppeteer.isConnected());
     }
 
     @Test
     public void testPuppeteerConnectionTimeoutInitializationWithInvalidKeys() {
         try {
-            puppeteer.initialize(connectionString, invalidConfigTemplate, connectionTimeout);
+            puppeteer.initialize(connectionString, invalidConfigTemplate, connectionTimeout, userName, password);
         } catch (Exception e) {
             Assert.assertTrue(e instanceof PuppeteerException.NoValueForKeyException);
         }
@@ -100,14 +104,14 @@ public class PuppeteerTest {
 
     @Test
     public void testPuppeteerGeneralInitialization() throws Exception {
-        puppeteer.initialize(connectionString, configTemplate, connectionTimeout, retryPolicyTimeout, retryPolicyTimeInterval);
+        puppeteer.initialize(connectionString, configTemplate, connectionTimeout, retryPolicyTimeout, retryPolicyTimeInterval, userName, password);
         Assert.assertTrue(puppeteer.isConnected());
     }
 
     @Test
     public void testPuppeteerGeneralInitializationWithInvalidKeys() {
         try {
-            puppeteer.initialize(connectionString, invalidConfigTemplate, connectionTimeout, retryPolicyTimeout, retryPolicyTimeInterval);
+            puppeteer.initialize(connectionString, invalidConfigTemplate, connectionTimeout, retryPolicyTimeout, retryPolicyTimeInterval, userName, password);
         } catch (Exception e) {
             Assert.assertTrue(e instanceof PuppeteerException.NoValueForKeyException);
         }
@@ -116,7 +120,7 @@ public class PuppeteerTest {
 
     @Test
     public void testGetKey() throws Exception {
-        puppeteer.initialize(connectionString, configTemplate, connectionTimeout, retryPolicyTimeout, retryPolicyTimeInterval);
+        puppeteer.initialize(connectionString, configTemplate, connectionTimeout, retryPolicyTimeout, retryPolicyTimeInterval, userName, password);
         String bar = puppeteer.get("/ola/shuttle/foo");
         Assert.assertEquals(bar,"bar");
     }
@@ -133,7 +137,7 @@ public class PuppeteerTest {
     @Test
     public void testGetInvalidKey()  {
         try {
-            puppeteer.initialize(connectionString, configTemplate, connectionTimeout, retryPolicyTimeout, retryPolicyTimeInterval);
+            puppeteer.initialize(connectionString, configTemplate, connectionTimeout, retryPolicyTimeout, retryPolicyTimeInterval, userName, password);
             String bar = puppeteer.get("/bar");
         } catch (Exception e) {
             Assert.assertTrue(e instanceof PuppeteerException.NoValueForKeyException);

@@ -4,7 +4,10 @@ import com.google.common.base.Joiner;
 import com.google.gson.JsonObject;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.api.ACLProvider;
 import org.apache.curator.retry.RetryUntilElapsed;
+import org.apache.zookeeper.ZooDefs;
+import org.apache.zookeeper.data.ACL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,22 +30,22 @@ public class PuppeteerImpl implements Puppeteer {
     private PuppeteerWatcher puppeteerWatcher;
 
     @Override
-    public void initialize(String connectionString, JsonObject configTemplate) throws Exception {
-        initialize(connectionString, configTemplate,DEFAULT_CONNECTION_MAX_TIMEOUT);
+    public void initialize(String connectionString, JsonObject configTemplate,  String userName, String password) throws Exception {
+        initialize(connectionString, configTemplate,DEFAULT_CONNECTION_MAX_TIMEOUT, userName, password);
     }
 
     @Override
-    public void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout) throws Exception {
-        initialize(connectionString, configTemplate, maxConnectionTimeout, DEFAULT_RETRY_POLICY_MAX_TIMEOUT, DEFAULT_RETRY_POLICY_TIME_INTERVAL);
+    public void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout,  String userName, String password) throws Exception {
+        initialize(connectionString, configTemplate, maxConnectionTimeout, DEFAULT_RETRY_POLICY_MAX_TIMEOUT, DEFAULT_RETRY_POLICY_TIME_INTERVAL,  userName, password);
     }
 
     @Override
-    public void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout, int retryPolicyMaxTimeout, int retryPolicyTimeInterval) throws Exception {
-        initialize(connectionString,configTemplate,maxConnectionTimeout,retryPolicyMaxTimeout,retryPolicyTimeInterval, new DefaultPuppeteerWatcher(this));
+    public void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout, int retryPolicyMaxTimeout, int retryPolicyTimeInterval,  String userName, String password) throws Exception {
+        initialize(connectionString,configTemplate,maxConnectionTimeout,retryPolicyMaxTimeout,retryPolicyTimeInterval,  userName, password, new DefaultPuppeteerWatcher(this));
     }
 
     @Override
-    public void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout, int retryPolicyMaxTimeout, int retryPolicyTimeInterval, PuppeteerWatcher watcher) throws Exception {
+    public void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout, int retryPolicyMaxTimeout, int retryPolicyTimeInterval,  String userName, String password, PuppeteerWatcher watcher) throws Exception {
         this.connectionString = connectionString;
         this.configTemplate = configTemplate;
         this.maxConnectionTimeout = maxConnectionTimeout;
@@ -50,10 +53,20 @@ public class PuppeteerImpl implements Puppeteer {
         // Since the application start up will depend on the config template being getting verified we are
         // keeping a retry max elapsed policy for initializing the zookeeper connection.
         retryPolicy = new RetryUntilElapsed(retryPolicyMaxTimeout, retryPolicyTimeInterval);
+        CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder().connectString(connectionString).retryPolicy(retryPolicy);
+        String authenticationString = userName + ":" + password;
+        builder.authorization("digest", authenticationString.getBytes()).aclProvider(new ACLProvider() {
+            @Override
+            public List<ACL> getDefaultAcl() {
+                return ZooDefs.Ids.READ_ACL_UNSAFE;
+            }
 
-        // The simplest way to get a CuratorFramework instance. This will use default values.
-        // The only required arguments are the connection string and the retry policy
-        client = CuratorFrameworkFactory.newClient(connectionString, retryPolicy);
+            @Override
+            public List<ACL> getAclForPath(String path) {
+                return ZooDefs.Ids.READ_ACL_UNSAFE;
+            }
+        });
+        client = builder.build();
         client.start();
         client.blockUntilConnected(this.maxConnectionTimeout, TimeUnit.MILLISECONDS);
         final List<String> emptyConfigValues = new ArrayList<>();

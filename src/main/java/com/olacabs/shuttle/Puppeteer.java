@@ -12,10 +12,10 @@ public interface Puppeteer {
     int DEFAULT_RETRY_POLICY_TIME_INTERVAL   =   500;
     int DEFAULT_CONNECTION_MAX_TIMEOUT       =   4000;
 
-    void initialize(String connectionString, JsonObject configTemplate) throws Exception;
-    void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout) throws Exception;
-    void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout, int retryPolicyMaxTimeout, int retryPolicyTimeInterval) throws Exception;
-    void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout, int retryPolicyMaxTimeout, int retryPolicyTimeInterval, PuppeteerWatcher watcher) throws Exception;
+    void initialize(String connectionString, JsonObject configTemplate, String userName, String password) throws Exception;
+    void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout,  String userName, String password) throws Exception;
+    void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout, int retryPolicyMaxTimeout, int retryPolicyTimeInterval,  String userName, String password) throws Exception;
+    void initialize(String connectionString, JsonObject configTemplate, int maxConnectionTimeout, int retryPolicyMaxTimeout, int retryPolicyTimeInterval,  String userName, String password, PuppeteerWatcher watcher) throws Exception;
 
     boolean isConnected();
     String get(String key) throws Exception;

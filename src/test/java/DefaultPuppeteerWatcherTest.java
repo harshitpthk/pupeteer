@@ -30,6 +30,8 @@ public class DefaultPuppeteerWatcherTest {
         String connectionString = zkConfig.get("zk_connection_string").getAsString();
         int retryPolicyTimeout = zkConfig.get("zk_retry_policy_max_timeout").getAsInt();
         int retryPolicyTimeInterval = zkConfig.get("zk_retry_policy_time_interval").getAsInt();
+        String userName = zkConfig.get("zk_username").getAsString();
+        String password = zkConfig.get("zk_password").getAsString();
         puppeteer = new PuppeteerImpl();
         final CuratorFramework client = CuratorFrameworkFactory.newClient(connectionString, new RetryUntilElapsed(retryPolicyTimeout, retryPolicyTimeInterval));
         client.start();
@@ -54,7 +56,7 @@ public class DefaultPuppeteerWatcherTest {
                 }
             }
         });
-        puppeteer.initialize(connectionString,configTemplate);
+        puppeteer.initialize(connectionString,configTemplate,userName,password);
     }
 
     @After
