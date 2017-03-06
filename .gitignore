@@ -39,3 +39,7 @@ hs_err_pid*
 */**.DS_Store
 **/*.DS_Store
 .idea
+
+*/prod_config_template.json
+*/prod_zk_config.json
+*ProdVerifier.java
