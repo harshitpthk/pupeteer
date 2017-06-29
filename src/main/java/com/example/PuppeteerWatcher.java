@@ -1,4 +1,4 @@
-package com.olacabs.shuttle;
+package com.example;
 
 import org.apache.curator.framework.api.CuratorWatcher;
 

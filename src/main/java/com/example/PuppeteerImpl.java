@@ -1,4 +1,4 @@
-package com.olacabs.shuttle;
+package com.example;
 
 import com.google.common.base.Joiner;
 import com.google.gson.JsonObject;

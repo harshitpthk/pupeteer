@@ -1,4 +1,4 @@
-package com.olacabs.shuttle;
+package com.example;
 
 /**
  * Puppeteer Exception wrapper

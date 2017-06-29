@@ -1,8 +1,8 @@
 import com.google.gson.JsonObject;
-import com.olacabs.shuttle.DefaultPuppeteerWatcher;
-import com.olacabs.shuttle.Puppeteer;
-import com.olacabs.shuttle.PuppeteerConfig;
-import com.olacabs.shuttle.PuppeteerImpl;
+import com.example.DefaultPuppeteerWatcher;
+import com.example.Puppeteer;
+import com.example.PuppeteerConfig;
+import com.example.PuppeteerImpl;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.RetryUntilElapsed;

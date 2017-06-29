@@ -1,4 +1,4 @@
-package com.olacabs.shuttle;
+package com.example;
 
 import org.apache.zookeeper.WatchedEvent;
 import org.slf4j.Logger;
