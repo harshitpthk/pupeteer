@@ -1,4 +1,4 @@
-package com.example;
+package io.trozo;
 
 import org.apache.curator.framework.api.CuratorWatcher;
 

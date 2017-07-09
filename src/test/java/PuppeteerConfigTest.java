@@ -1,5 +1,5 @@
 import com.google.gson.JsonObject;
-import com.example.PuppeteerConfig;
+import io.trozo.PuppeteerConfig;
 import org.apache.curator.test.TestingServer;
 import org.junit.After;
 import org.junit.Assert;

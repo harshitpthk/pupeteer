@@ -1,4 +1,4 @@
-package com.example;
+package io.trozo;
 
 import com.google.common.base.Joiner;
 import com.google.gson.JsonObject;

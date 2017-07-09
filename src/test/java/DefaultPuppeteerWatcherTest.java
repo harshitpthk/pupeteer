@@ -1,8 +1,8 @@
 import com.google.gson.JsonObject;
-import com.example.DefaultPuppeteerWatcher;
-import com.example.Puppeteer;
-import com.example.PuppeteerConfig;
-import com.example.PuppeteerImpl;
+import io.trozo.DefaultPuppeteerWatcher;
+import io.trozo.Puppeteer;
+import io.trozo.PuppeteerConfig;
+import io.trozo.PuppeteerImpl;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.RetryUntilElapsed;
@@ -69,13 +69,13 @@ public class DefaultPuppeteerWatcherTest {
     public void testHandleEvent() throws Exception{
         Watcher.Event.EventType nodeChangeEvent = Watcher.Event.EventType.NodeDataChanged;
         Watcher.Event.EventType nodeDeletedEvent = Watcher.Event.EventType.NodeDeleted;
-        WatchedEvent nodeChangeWatchedEvent = new WatchedEvent(nodeChangeEvent, Watcher.Event.KeeperState.SyncConnected, "/ola/shuttle/foo");
-        WatchedEvent nodeDeletedWatchedEvent = new WatchedEvent(nodeDeletedEvent, Watcher.Event.KeeperState.SyncConnected, "/ola/shuttle/foo");
+        WatchedEvent nodeChangeWatchedEvent = new WatchedEvent(nodeChangeEvent, Watcher.Event.KeeperState.SyncConnected, "/io/trozo/foo");
+        WatchedEvent nodeDeletedWatchedEvent = new WatchedEvent(nodeDeletedEvent, Watcher.Event.KeeperState.SyncConnected, "/io/trozo/foo");
         DefaultPuppeteerWatcher defaultPuppeteerWatcher = new DefaultPuppeteerWatcher(puppeteer);
         String newValue = defaultPuppeteerWatcher.handleEvent(nodeChangeWatchedEvent);
         Assert.assertEquals(newValue, "bar");
         String deletedNode = defaultPuppeteerWatcher.handleEvent(nodeDeletedWatchedEvent);
-        Assert.assertEquals(deletedNode,"/ola/shuttle/foo");
+        Assert.assertEquals(deletedNode,"/io/trozo/foo");
     }
 
 }

@@ -1,11 +1,11 @@
 {
-  "ola":{
-    "shuttle":{
+  "io":{
+    "trozo":{
       "foo":"bar",
-      "oms":{
+      "falcon":{
         "foo":"bar"
       },
-      "ims":{
+      "mona":{
         "foo":"bar"
       }
     }

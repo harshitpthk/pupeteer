@@ -1,4 +1,4 @@
-package com.example;
+package io.trozo;
 
 /**
  * Puppeteer Exception wrapper

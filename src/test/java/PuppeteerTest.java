@@ -1,8 +1,8 @@
 import com.google.gson.JsonObject;
-import com.example.Puppeteer;
-import com.example.PuppeteerConfig;
-import com.example.PuppeteerException;
-import com.example.PuppeteerImpl;
+import io.trozo.Puppeteer;
+import io.trozo.PuppeteerConfig;
+import io.trozo.PuppeteerException;
+import io.trozo.PuppeteerImpl;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.RetryUntilElapsed;
@@ -121,14 +121,14 @@ public class PuppeteerTest {
     @Test
     public void testGetKey() throws Exception {
         puppeteer.initialize(connectionString, configTemplate, connectionTimeout, retryPolicyTimeout, retryPolicyTimeInterval, userName, password);
-        String bar = puppeteer.get("/ola/shuttle/foo");
+        String bar = puppeteer.get("/io/trozo/foo");
         Assert.assertEquals(bar,"bar");
     }
 
     @Test
     public void testGetKeyWithNullClient() {
         try {
-            String bar = puppeteer.get("/ola/shuttle/foo");
+            String bar = puppeteer.get("/io/trozo/foo");
         } catch (Exception e) {
             Assert.assertTrue( e instanceof PuppeteerException.UninitializedException);
         }
